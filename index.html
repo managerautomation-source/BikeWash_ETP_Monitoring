@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Bike Wash ETP - Dashboard Mockup</title>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#EEF3F4;--card:#fff;--ink:#12303A;--mute:#5B7480;--line:#D5E0E3;--teal:#0E7C86;--tealbg:#DCEFF1;--amber:#B57600;--amberbg:#FBF0D5;--red:#C03A30;--redbg:#FADEDB;--green:#2A7F4F;--greenbg:#DDF0E5;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0D1A1F;--card:#14262D;--ink:#E4EEF0;--mute:#8FA8B1;--line:#25404A;--teal:#4CC2CC;--tealbg:#18363C;--amber:#E8B04A;--amberbg:#3A2E14;--red:#EF7B72;--redbg:#40201D;--green:#5CC28A;--greenbg:#173626}}
+:root[data-theme="dark"]{--bg:#0D1A1F;--card:#14262D;--ink:#E4EEF0;--mute:#8FA8B1;--line:#25404A;--teal:#4CC2CC;--tealbg:#18363C;--amber:#E8B04A;--amberbg:#3A2E14;--red:#EF7B72;--redbg:#40201D;--green:#5CC28A;--greenbg:#173626}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.45 "Public Sans",system-ui,Arial,sans-serif}
+header{padding:18px 20px 0;max-width:1180px;margin:auto}
+h1{font-size:20px;margin:0;font-weight:700}
+.sub{color:var(--mute);font-size:13px;margin-top:2px}
+.note{background:var(--amberbg);color:var(--amber);border-radius:6px;padding:6px 10px;font-size:12px;margin-top:10px;display:inline-block}
+nav{display:flex;gap:4px;overflow-x:auto;padding:14px 20px 0;max-width:1180px;margin:auto;border-bottom:1px solid var(--line)}
+nav button{font:inherit;background:none;border:0;color:var(--mute);padding:9px 14px;cursor:pointer;border-bottom:3px solid transparent;white-space:nowrap}
+nav button.on{color:var(--ink);font-weight:700;border-color:var(--teal)}
+nav button:focus-visible{outline:2px solid var(--teal)}
+main{max-width:1180px;margin:auto;padding:18px 20px 40px}
+.grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px}
+.card h3{margin:0 0 8px;font-size:14px}
+.big{font-size:28px;font-weight:700;line-height:1.1}
+.lbl{color:var(--mute);font-size:12px}
+.tag{display:inline-block;padding:2px 8px;border-radius:99px;font-size:12px;font-weight:500}
+.ok{background:var(--greenbg);color:var(--green)}.warn{background:var(--amberbg);color:var(--amber)}.bad{background:var(--redbg);color:var(--red)}.info{background:var(--tealbg);color:var(--teal)}
+.flow{display:flex;gap:0;overflow-x:auto;padding:4px 0}
+.stage{flex:1;min-width:112px;text-align:center;padding:10px 6px;border:1px solid var(--line);background:var(--card);position:relative}
+.stage:first-child{border-radius:10px 0 0 10px}.stage:last-child{border-radius:0 10px 10px 0}
+.stage .dot{width:10px;height:10px;border-radius:50%;display:inline-block;margin-right:5px}
+.stage b{font-size:13px}.stage div{font-size:12px;color:var(--mute);margin-top:3px}
+.wrap{overflow-x:auto}
+table{border-collapse:collapse;width:100%;min-width:560px}
+th,td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:middle}
+th{font-size:12px;color:var(--mute);font-weight:500}
+.bar{height:8px;background:var(--line);border-radius:4px;min-width:90px;overflow:hidden}.bar i{display:block;height:100%}
+.feed{list-style:none;margin:0;padding:0}.feed li{display:flex;gap:10px;padding:8px 0;border-bottom:1px solid var(--line)}.feed time{color:var(--mute);width:56px;flex:none;font-variant-numeric:tabular-nums}
+.snap{aspect-ratio:4/3;border-radius:8px;background:repeating-linear-gradient(45deg,var(--tealbg),var(--tealbg) 8px,var(--card) 8px,var(--card) 16px);border:1px solid var(--line);display:flex;align-items:flex-end;padding:6px;font-size:11px;color:var(--mute)}
+.two{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));margin-top:14px}
+.step{display:flex;gap:3px;margin:6px 0}.step span{flex:1;height:20px;border-radius:3px;background:var(--teal);color:#fff;font-size:10px;display:flex;align-items:center;justify-content:center}
+.pipe{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:6px 0 4px}.pipe .n{padding:8px 12px;border:1px solid var(--line);border-radius:8px;background:var(--card);font-weight:500}.pipe .n.erp{background:var(--teal);color:#fff;border-color:var(--teal)}.pipe .a{color:var(--mute)}
+.in{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px}.in label{font-size:12px;color:var(--mute);display:block}.in input{width:100%;font:inherit;padding:7px 8px;border:1px solid var(--line);border-radius:6px;background:var(--card);color:var(--ink)}
+.sc{cursor:pointer;text-align:left;font:inherit;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 14px}.sc:focus-visible,.sc.on{outline:2px solid var(--teal)}
+.scale{position:relative;height:14px;border-radius:7px;background:var(--redbg);margin:22px 0 6px}.scale .g{position:absolute;top:0;bottom:0;background:var(--greenbg);border:1px solid var(--green)}.scale .m{position:absolute;top:-6px;width:4px;height:26px;background:var(--ink);border-radius:2px}
+.fm{background:var(--tealbg);color:var(--ink);border-radius:8px;padding:10px 12px;font-weight:500;overflow-x:auto}
+.hidden{display:none}
+</style></head><body>
+<header><h1>Bike Wash ETP Monitor</h1><div class="sub">Site: Sample Service Center, Mumbai &nbsp;|&nbsp; Last event received 12 sec ago</div>
+<span class="note">Mockup with sample data. Shows how event-based IoT data appears on the dashboard and feeds ERPNext.</span></header>
+<nav id="tabs"></nav><main id="view"></main>
+<script>
+const $=s=>document.querySelector(s);
+const pill=(t,c)=>`<span class="tag ${c}">${t}</span>`;
+const bar=(p,c)=>`<div class="bar"><i style="width:${p}%;background:var(--${c})"></i></div>`;
+const tbl=(h,rows)=>`<div class="wrap"><table><tr>${h.map(x=>`<th>${x}</th>`).join('')}</tr>${rows.map(r=>`<tr>${r.map(x=>`<td>${x}</td>`).join('')}</tr>`).join('')}</table></div>`;
+const kpi=(l,v,s,t)=>`<div class="card"><div class="lbl">${l}</div><div class="big">${v}</div><div style="margin-top:6px">${t||''} <span class="lbl">${s}</span></div></div>`;
+const feed=a=>`<ul class="feed">${a.map(e=>`<li><time>${e[0]}</time><div>${e[1]}</div></li>`).join('')}</ul>`;
+const V={
+overview:()=>`<div class="grid">
+${kpi('Chemical stock variance','1.8%','vs theoretical, today',pill('Within 5% limit','ok'))}
+${kpi('Sludge-out compliance','92%','this month',pill('1 overdue','warn'))}
+${kpi('Backwash cycles today','6 of 6','sand 4, carbon 2',pill('All completed','ok'))}
+${kpi('Washes today','212','TVS Krishna 96, RE Manmohan 71, TVS Trijal 45',pill('Every wash captured','info'))}</div>
+<div class="card" style="margin-top:14px"><h3>Process status</h3><div class="flow">
+${[['Equalisation','Level 68%','green'],['Dosing','Alum, Lime, Poly running','green'],['Clarifier','Sludge-out due','amber'],['Sand filter','DP 0.6 bar','green'],['Carbon filter','Backwash in progress','amber'],['Treated tank','Level 81%','green']].map(s=>`<div class="stage"><b><span class="dot" style="background:var(--${s[2]})"></span>${s[0]}</b><div>${s[1]}</div></div>`).join('')}</div></div>
+<div class="two"><div class="card"><h3>Latest events</h3>${feed([['14:32','Carbon filter backwash started (timer, auto)'],['14:10','Alum tank refilled: 180 L (level 22% to 78%)'],['13:45','Clarifier sludge-out completed, 22 min, valve closed'],['12:58','Lime pump auto-started, pH 6.4 to 7.0'],['11:20','Antifoam tank below 20%, alert sent']])}</div>
+<div class="card"><h3>Needs attention</h3>${feed([['Now',pill('Overdue','bad')+' Oil trap cleaning, due 28 Sep'],['Now',pill('Low','warn')+' Antifoam stock 18%'],['Today',pill('Check','warn')+' Sand filter DP rising faster than last week']])}</div></div>`,
+chem:()=>`<div class="card"><h3>Chemical dosing and stock</h3>${tbl(['Chemical','Tank level','Dosed today','Last fill','Variance','Pump'],
+[['Alum',bar(78,'teal')+'78%','46 L','180 L, 14:10','+1.2%',pill('Auto','ok')],['Lime',bar(55,'teal')+'55%','32 kg','60 kg, 29 Sep','+2.4%',pill('Auto','ok')],['Polymer',bar(61,'teal')+'61%','3.1 L','20 L, 27 Sep','+0.8%',pill('Auto','ok')],['Antifoam',bar(18,'red')+'18%','1.4 L','10 L, 24 Sep','-0.5%',pill('Auto','ok')],['Shampoo',bar(44,'amber')+'44%','28 L (212 washes)','50 L, 30 Sep','+3.9%',pill('Manual override','warn')]])}</div>
+<div class="two"><div class="card"><h3>Dosing trend, Alum (L per hour)</h3>${spark([3,4,5,6,5,7,6,4,3,5,6,4])}<div class="lbl">Each dose is logged with start, end, quantity and mode.</div></div>
+<div class="card"><h3>Filling log</h3>${feed([['14:10','Alum, +180 L, level 22% to 78%, filled by Ramesh (login)'],['30 Sep','Shampoo, +50 L, level 12% to 60%'],['29 Sep','Lime, +60 kg, level 9% to 70%'],['27 Sep','Polymer, +20 L, level 14% to 71%']])}</div></div>`,
+sludge:()=>`<div class="card"><h3>Sludge-out and tank cleaning audit</h3>${tbl(['Tank','Last activity','Duration','Sludge removed (est.)','Next due','Status'],
+[['Equalisation tank','Sludge-out, 30 Sep 09:10','18 min','0.4 m3','7 Oct',pill('On time','ok')],['Clarifier','Sludge-out, 01 Oct 13:45','22 min','0.6 m3','8 Oct',pill('On time','ok')],['Oil trap','Cleaning, 21 Sep','Manual, 2 h','-','28 Sep',pill('Overdue 3 days','bad')],['Sludge holding','Sludge-out, 25 Sep','30 min','0.9 m3','9 Oct',pill('On time','ok')],['Treated water tank','Cleaning, 15 Sep','Manual, 3 h','-','15 Oct',pill('On time','ok')]])}</div>
+<div class="card" style="margin-top:14px"><h3>Machine-captured evidence: Clarifier sludge-out, 01 Oct</h3>
+<div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(150px,1fr))"><div><div class="snap">Valve open 13:23</div></div><div><div class="snap">Mid-cycle 13:34</div></div><div><div class="snap">Valve closed 13:45</div></div>
+<div class="lbl">Sensor trail: valve open feedback, sludge pump ran 21 min, level 82% to 64%. Snapshots are taken on events only.</div></div></div>`,
+bw:()=>`<div class="grid">
+<div class="card"><h3>Sand filter</h3><div class="lbl">Differential pressure</div>${bar(40,'green')}<div class="big" style="margin-top:6px">0.6 bar</div><div class="lbl">Last backwash 12:05, 14 min, trigger: DP high</div>
+<div class="step">${['Backwash','Rinse','Service'].map(x=>`<span>${x}</span>`).join('')}</div><div>${pill('Completed','ok')} <span class="lbl">4 cycles today</span></div></div>
+<div class="card"><h3>Carbon filter</h3><div class="lbl">Differential pressure</div>${bar(55,'amber')}<div class="big" style="margin-top:6px">0.8 bar</div><div class="lbl">Backwash started 14:32, step 2 of 3</div>
+<div class="step"><span>Backwash</span><span style="background:var(--amber)">Rinse</span><span style="background:var(--line);color:var(--mute)">Service</span></div><div>${pill('In progress','warn')} <span class="lbl">2 cycles today</span></div></div>
+<div class="card"><h3>Backwash water used today</h3><div class="big">3.2 m3</div><div class="lbl">Sand 2.1 m3, carbon 1.1 m3</div><div style="margin-top:8px">${pill('Mode: monitor only','info')}</div></div></div>
+<div class="two"><div class="card"><h3>Sand filter DP, last 12 hours (bar)</h3>${spark([.3,.4,.5,.6,.7,.3,.4,.5,.6,.7,.8,.6])}<div class="lbl">DP drops after each backwash. Slow drops mean the cycle is not effective.</div></div>
+<div class="card"><h3>Backwash log</h3>${tbl(['Time','Filter','Duration','Trigger','Result'],[['14:32','Carbon','In progress','Timer',pill('Running','warn')],['12:05','Sand','14 min','DP high',pill('OK','ok')],['09:40','Sand','9 min','Timer',pill('Short','warn')],['07:30','Carbon','16 min','Timer',pill('OK','ok')]])}</div></div>`,
+iot:()=>`<div class="grid">
+${kpi('Washes today','212','counted on each wash-complete event',pill('Live','info'))}
+${kpi('Fresh water added','9.4 m3','4 additions today',pill('Logged on event','ok'))}
+${kpi('Active alarms','1','Antifoam tank low',pill('Open','warn'))}
+${kpi('Gateway','Online','0 events waiting in buffer',pill('No events lost','ok'))}</div>
+<div class="two"><div class="card"><h3>Wash events</h3><div class="lbl" style="margin-bottom:6px">One record is sent when a wash finishes. The total updates by itself.</div>${tbl(['Time','Bay','Dealership','Duration','Water','Shampoo'],
+[['14:28','Bay 2','TVS Krishna Motors','3 min 40 s','28 L','60 ml'],['14:24','Bay 1','RE Manmohan Chandigarh','3 min 15 s','26 L','55 ml'],['14:19','Bay 3','TVS Trijal Motors','4 min 02 s','31 L','65 ml'],['14:15','Bay 2','TVS Krishna Motors','3 min 31 s','27 L','60 ml'],['14:11','Bay 1','TVS Krishna Motors','3 min 22 s','27 L','58 ml']])}</div>
+<div class="card"><h3>Alarms</h3><div class="lbl" style="margin-bottom:6px">Sent the moment a condition starts, and again when it clears.</div>${tbl(['Time','Alarm','Status','Notified'],
+[['14:05','Antifoam tank low, 18%',pill('Open','bad'),'SMS, app'],['11:42','Sand filter DP high, 0.8 bar',pill('Cleared 12:05','ok'),'App'],['09:12','Lime pump dry run',pill('Cleared 09:20','ok'),'SMS, app']])}</div></div>
+<div class="two"><div class="card"><h3>Fresh water addition</h3><div class="lbl" style="margin-bottom:6px">Logged when the inlet valve opens and closes.</div>${tbl(['Time','Reason','Added','Total today'],
+[['14:15','Treated tank low, 30%','2.5 m3','9.4 m3'],['12:30','Treated tank low, 29%','2.4 m3','6.9 m3'],['10:05','Treated tank low, 31%','2.5 m3','4.5 m3'],['06:40','Morning top-up','2.0 m3','2.0 m3']])}</div>
+<div class="card"><h3>Event stream</h3>${feed([['14:28:44',pill('WASH_COMPLETE','info')+' TVS Krishna Motors, bay 2'],['14:19:02',pill('WASH_COMPLETE','info')+' TVS Trijal Motors, bay 3'],['14:15:10',pill('FRESH_WATER_END','ok')+' 2.5 m3'],['14:05:31',pill('ALARM_RAISED','bad')+' Antifoam low'],['14:02:55',pill('CHEM_DOSE','info')+' Alum 0.4 L']])}</div></div>
+<div class="two"><div class="card"><h3>What one wash event looks like</h3><pre style="margin:0;overflow-x:auto;font-size:12px;line-height:1.5">{
+ "event": "WASH_COMPLETE",
+ "site": "MUM-01", "bay": 2,
+ "dealership": "TVS-KRISHNA-MOTORS",
+ "start": "2026-10-01T14:25:04+05:30",
+ "end":   "2026-10-01T14:28:44+05:30",
+ "water_l": 28, "shampoo_ml": 60,
+ "seq": 1873
+}</pre></div>
+<div class="card"><h3>When a message is sent</h3>${feed([['Wash','When a wash finishes'],['Alarm','When it starts and when it clears'],['Water','When fresh water starts and stops'],['Chemicals','When dosing ends and when a tank is filled'],['Plant','When backwash, sludge-out or cleaning starts and ends'],['Link','When the gateway connects or drops']])}<div class="lbl" style="margin-top:8px">If the network drops, the gateway keeps events with their time and sends them in order when it is back.</div></div></div>`,
+erp:()=>`<div class="card"><h3>Data flow</h3><div class="pipe"><span class="n">PLC</span><span class="a">to</span><span class="n">IoT gateway</span><span class="a">to</span><span class="n erp">ERPNext database</span></div><div class="lbl">Each IoT event is written to ERPNext through its API. ERPNext then handles chemical stock and wash billing.</div></div>
+<div class="card" style="margin-top:14px"><h3>Chemical stock and issue to site</h3>${tbl(['Chemical','Tank level','Site store stock','Used per day','Days left','Reorder level','Action'],
+[['Alum',bar(78,'teal')+'78%','240 L','46 L','5.2',"150 L",pill('Issue 300 L','warn')],['Lime',bar(55,'teal')+'55%','180 kg','32 kg','5.6','100 kg',pill('Issue 200 kg','warn')],['Polymer',bar(61,'teal')+'61%','38 L','3.1 L','12.3','15 L',pill('OK','ok')],['Antifoam',bar(18,'red')+'18%','6 L','1.4 L','4.3','8 L',pill('Issue now, 20 L','bad')],['Shampoo',bar(44,'amber')+'44%','95 L','28 L','3.4','60 L',pill('Issue 150 L','bad')]])}
+<div class="lbl" style="margin-top:8px">Used per day comes from dosing events. Stock moves in ERPNext when a tank is filled. When site store stock falls below the reorder level or under 7 days, a stock transfer to the site is requested.</div></div>
+<div class="card" style="margin-top:14px"><h3>Washes billed per dealership, October (sample)</h3>${(()=>{const d=[['TVS Krishna Motors',1180,35],['RE Manmohan Chandigarh',905,35],['TVS Trijal Motors',640,32]];let tw=0,ta=0;const r=d.map(x=>{const a=x[1]*x[2];tw+=x[1];ta+=a;return [x[0],x[1].toLocaleString('en-IN'),'Rs '+x[2],'Rs '+a.toLocaleString('en-IN'),pill('Draft invoice','info')]});r.push(['<b>Total</b>','<b>'+tw.toLocaleString('en-IN')+'</b>','','<b>Rs '+ta.toLocaleString('en-IN')+'</b>','']);return tbl(['Dealership','Washes','Rate per wash','Amount (before tax)','Invoice'],r)})()}
+<div class="lbl" style="margin-top:8px">Each WASH_COMPLETE event adds one wash to the dealership. An invoice is drafted at month end from these counts.</div></div>
+<div class="two"><div class="card"><h3>What each event does in ERPNext</h3>${tbl(['IoT event','ERPNext record'],[['Wash complete','Wash log entry, counted to the dealership (Customer)'],['Month end','Sales Invoice per dealership'],['Chemical dose','Daily consumption total per chemical'],['Tank filled','Stock Entry, material issued from site store'],['Stock below reorder','Material Request, then Stock Entry transfer to site'],['Fresh water added','Water usage log for cost tracking'],['Alarm','Issue or task, for example low chemical']])}</div>
+<div class="card"><h3>To confirm</h3>${feed([['Decide','How the dealership is identified at the bay: selection on HMI, RFID tag or job card'],['Needed','ERPNext version, hosting and API access'],['Needed','Item codes and site warehouse names'],['Needed','Dealership list as Customers, with rates and tax'],['Decide','Invoice monthly, weekly or per wash']])}</div></div>`,
+variance:()=>`<div class="card"><h3>How variance is calculated</h3>
+<div class="fm">Actual used = Opening stock + Filled - Closing stock<br>Variance % = (Actual used - Theoretical used) / Theoretical used x 100</div>
+<div class="lbl" style="margin-top:8px">Theoretical used = set dose rate x volume treated (shampoo: ml per wash x washes). Pump-recorded dosing is a third number used to find where a gap comes from.</div>
+<div class="lbl" style="margin-top:6px">Plus sign: used more than theoretical. Minus sign: used less than theoretical. Within the limit set per chemical: normal.</div></div>
+<div class="grid" style="margin-top:14px" id="scs"></div>
+<div class="two"><div class="card"><h3>Try your own numbers (Alum, litres, one day)</h3><div class="in">
+<div><label for="o">Opening stock</label><input id="o" type="number" value="300"></div>
+<div><label for="f">Filled</label><input id="f" type="number" value="0"></div>
+<div><label for="c">Closing stock</label><input id="c" type="number" value="244"></div>
+<div><label for="t">Theoretical used</label><input id="t" type="number" value="55"></div>
+<div><label for="p">Pump-recorded dosing</label><input id="p" type="number" value="55"></div>
+<div><label for="lim">Limit (+/- %)</label><input id="lim" type="number" value="5"></div></div>
+<div id="calc" class="lbl" style="margin-top:10px"></div></div>
+<div class="card"><h3>How it shows on the dashboard</h3><div id="res"></div></div></div>`
+};
+function spark(a){const m=Math.max(...a),w=300,h=70,s=w/(a.length-1);const p=a.map((v,i)=>`${i*s},${h-8-(v/m)*(h-16)}`).join(' ');return `<svg viewBox="0 0 ${w} ${h}" width="100%" height="70" role="img" aria-label="trend"><polyline points="${p}" fill="none" stroke="var(--teal)" stroke-width="2.5"/></svg>`}
+
+function initVar(){
+const S={'Within limit':{o:300,f:0,c:244,t:55,p:55,lim:5},'Higher than theoretical':{o:300,f:180,c:400,t:55,p:56,lim:5},'Lower than theoretical':{o:300,f:0,c:262,t:55,p:37,lim:5}};
+const ids=['o','f','c','t','p','lim'],g=i=>+document.getElementById(i).value;
+const fmt=x=>(x>0?'+':x<0?'-':'')+Math.abs(x).toFixed(1)+'%';
+function calc(){const o=g('o'),f=g('f'),c=g('c'),t=g('t'),p=g('p'),L=Math.abs(g('lim'));
+const a=o+f-c,v=t>0?(a-t)/t*100:0,pv=t>0?(p-t)/t*100:0;
+let cls='ok',head='Within limit',msg='Use matches the set dose. No action needed.';
+if(v>L){cls='bad';head='Higher than theoretical';msg=Math.abs(pv)<=L?'Pump shows normal dosing but stock fell more. Likely loss after the pump: check leakage, spill, wrong fill entry or missing stock.':'Pump itself is dosing more than set. Check dose setting and pump calibration.'}
+else if(v<-L){cls='warn';head='Lower than theoretical';msg=Math.abs(pv)<=L?'Pump shows normal dosing but stock fell less. Check the level sensor and the fill entry.':'Pump is dosing less than set. Check pump, blocked line or empty suction. Treatment quality may be at risk.'}
+const mx=Math.max(a,t,p,1),b=(n,c)=>`<div class="lbl" style="margin-top:6px">${n}: <b>${n==='Stock-based actual'?a.toFixed(1):(n==='Theoretical'?t:p)} L</b></div>${bar(Math.max(0,Math.min(100,(n==='Stock-based actual'?a:n==='Theoretical'?t:p)/mx*100)),c)}`;
+const pos=Math.max(0,Math.min(100,(v+50)));
+document.getElementById('calc').innerHTML=`Actual used = ${o} + ${f} - ${c} = <b>${a.toFixed(1)} L</b><br>Variance = (${a.toFixed(1)} - ${t}) / ${t} x 100 = <b>${t>0?fmt(v):'n/a'}</b>`;
+document.getElementById('res').innerHTML=`<div class="lbl">Chemical stock variance, Alum</div><div class="big">${fmt(v)}</div><div style="margin:6px 0">${pill(head,cls)} <span class="lbl">limit +/- ${L}%</span></div>
+<div class="scale"><div class="g" style="left:${50-L}%;width:${2*L}%"></div><div class="m" style="left:calc(${pos}% - 2px)"></div></div><div class="lbl" style="display:flex;justify-content:space-between"><span>-50%</span><span>0</span><span>+50%</span></div>
+${b('Theoretical','teal')}${b('Pump-recorded','teal')}${b('Stock-based actual',cls==='ok'?'green':cls==='bad'?'red':'amber')}
+<div style="margin-top:10px;padding:8px 10px;border-radius:8px" class="${cls==='ok'?'info':cls}">${msg}</div>`}
+const box=document.getElementById('scs');
+Object.keys(S).forEach((k,i)=>{const d=S[k],a=d.o+d.f-d.c,v=(a-d.t)/d.t*100,c=Math.abs(v)<=d.lim?'ok':v>0?'bad':'warn';
+const bt=document.createElement('button');bt.className='sc';bt.innerHTML=`<b>${k}</b><div class="big" style="margin:6px 0">${fmt(v)}</div>${pill(k==='Within limit'?'Normal':k==='Higher than theoretical'?'Alert: over-use':'Alert: under-use',c)}<div class="lbl" style="margin-top:6px">Actual ${a} L vs theoretical ${d.t} L. Click to load.</div>`;
+bt.onclick=()=>{ids.forEach(x=>document.getElementById(x).value=d[x]);calc();box.querySelectorAll('.sc').forEach(e=>e.classList.remove('on'));bt.classList.add('on')};box.appendChild(bt)});
+ids.forEach(i=>document.getElementById(i).oninput=calc);calc();box.firstChild.classList.add('on')}
+const names={overview:'Overview',chem:'Chemicals',variance:'Stock variance',sludge:'Sludge and cleaning',bw:'Filter backwash',iot:'IoT events',erp:'ERPNext flow'};
+const tabs=$('#tabs');
+function show(k){tabs.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b.dataset.k===k));$('#view').innerHTML=V[k]();if(k==='variance')initVar()}
+Object.keys(names).forEach(k=>{const b=document.createElement('button');b.textContent=names[k];b.dataset.k=k;b.onclick=()=>show(k);tabs.appendChild(b)});
+show('overview');
+</script></body></html>
