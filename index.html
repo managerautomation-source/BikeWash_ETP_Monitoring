@@ -46,6 +46,11 @@ th{font-size:12px;color:var(--mute);font-weight:500}
 .sc{cursor:pointer;text-align:left;font:inherit;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 14px}.sc:focus-visible,.sc.on{outline:2px solid var(--teal)}
 .scale{position:relative;height:14px;border-radius:7px;background:var(--redbg);margin:22px 0 6px}.scale .g{position:absolute;top:0;bottom:0;background:var(--greenbg);border:1px solid var(--green)}.scale .m{position:absolute;top:-6px;width:4px;height:26px;background:var(--ink);border-radius:2px}
 .fm{background:var(--tealbg);color:var(--ink);border-radius:8px;padding:10px 12px;font-weight:500;overflow-x:auto}
+.bt{font:inherit;padding:6px 10px;border-radius:6px;border:1px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer;margin:2px 4px 2px 0}.bt.p{background:var(--teal);color:var(--card);border-color:var(--teal)}.bt.d{background:var(--red);color:var(--card);border-color:var(--red)}.bt:focus-visible{outline:2px solid var(--teal)}
+input[type=date]{font:inherit;padding:5px 6px;border:1px solid var(--line);border-radius:6px;background:var(--card);color:var(--ink)}
+.subnav{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}.subnav button{font:inherit;border:1px solid var(--line);background:var(--card);color:var(--mute);border-radius:99px;padding:6px 14px;cursor:pointer}.subnav button.on{background:var(--teal);color:var(--card);border-color:var(--teal);font-weight:700}.subnav button:focus-visible{outline:2px solid var(--teal)}
+.in select{width:100%;font:inherit;padding:7px 8px;border:1px solid var(--line);border-radius:6px;background:var(--card);color:var(--ink)}
+details>summary{list-style:none}details>summary::-webkit-details-marker{display:none}details>summary:before{content:"\25B8  ";color:var(--teal)}details[open]>summary:before{content:"\25BE  "}
 .hidden{display:none}
 </style></head><body>
 <header><h1>Bike Wash ETP Monitor</h1><div class="sub">Site: Sample Service Center, Mumbai &nbsp;|&nbsp; Last event received 12 sec ago</div>
@@ -75,8 +80,8 @@ chem:()=>`<div class="card"><h3>Chemical dosing and stock</h3>${tbl(['Chemical',
 sludge:()=>`<div class="card"><h3>Sludge-out and tank cleaning audit</h3>${tbl(['Tank','Last activity','Duration','Sludge removed (est.)','Next due','Status'],
 [['Equalisation tank','Sludge-out, 30 Sep 09:10','18 min','0.4 m3','7 Oct',pill('On time','ok')],['Clarifier','Sludge-out, 01 Oct 13:45','22 min','0.6 m3','8 Oct',pill('On time','ok')],['Oil trap','Cleaning, 21 Sep','Manual, 2 h','-','28 Sep',pill('Overdue 3 days','bad')],['Sludge holding','Sludge-out, 25 Sep','30 min','0.9 m3','9 Oct',pill('On time','ok')],['Treated water tank','Cleaning, 15 Sep','Manual, 3 h','-','15 Oct',pill('On time','ok')]])}</div>
 <div class="card" style="margin-top:14px"><h3>Machine-captured evidence: Clarifier sludge-out, 01 Oct</h3>
-<div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(150px,1fr))"><div><div class="snap">Valve open 13:23</div></div><div><div class="snap">Mid-cycle 13:34</div></div><div><div class="snap">Valve closed 13:45</div></div>
-<div class="lbl">Sensor trail: valve open feedback, sludge pump ran 21 min, level 82% to 64%. Snapshots are taken on events only.</div></div></div>`,
+<div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(220px,1fr))"><div>${snap('13:23:10',82,0,1,'OPEN','#2A7F4F')}<div class="lbl" style="margin-top:4px">13:23 Valve open, sludge flowing</div></div><div>${snap('13:34:42',73,45,.5,'MID','#B57600')}<div class="lbl" style="margin-top:4px">13:34 Mid-cycle, valve half open</div></div><div>${snap('13:45:18',64,90,0,'CLOSED','#0E7C86')}<div class="lbl" style="margin-top:4px">13:45 Valve closed, flow stopped</div></div>
+<div class="lbl">Sensor trail: valve open feedback, sludge pump ran 21 min, level 82% to 64%. Snapshots are taken on events only. Pictures here are illustrations; real camera snapshots replace them.</div></div></div>`,
 bw:()=>`<div class="grid">
 <div class="card"><h3>Sand filter</h3><div class="lbl">Differential pressure</div>${bar(40,'green')}<div class="big" style="margin-top:6px">0.6 bar</div><div class="lbl">Last backwash 12:05, 14 min, trigger: DP high</div>
 <div class="step">${['Backwash','Rinse','Service'].map(x=>`<span>${x}</span>`).join('')}</div><div>${pill('Completed','ok')} <span class="lbl">4 cycles today</span></div></div>
@@ -128,7 +133,29 @@ variance:()=>`<div class="card"><h3>How variance is calculated</h3>
 <div><label for="p">Pump-recorded dosing</label><input id="p" type="number" value="55"></div>
 <div><label for="lim">Limit (+/- %)</label><input id="lim" type="number" value="5"></div></div>
 <div id="calc" class="lbl" style="margin-top:10px"></div></div>
-<div class="card"><h3>How it shows on the dashboard</h3><div id="res"></div></div></div>`
+<div class="card"><h3>How it shows on the dashboard</h3><div id="res"></div></div></div>`,
+water:()=>{const R=0.5,ev=[['06:36','06:40','Morning top-up',2.0,'4:02'],['10:00','10:05','Treated tank low',2.5,'5:03'],['12:25','12:30','Treated tank low',2.4,'5:00'],['14:10','14:15','Treated tank low',2.5,'5:58']];
+let tot=0,tm=0,okn=0;const rows=ev.map(e=>{const [m,sc]=e[4].split(':').map(Number),mi=m+sc/60,ex=mi*R,d=(e[3]-ex)/ex*100,ok=Math.abs(d)<=5;tot+=e[3];tm+=mi;if(ok)okn++;
+return [e[0]+' to '+e[1],e[2],e[3].toFixed(1)+' m3',e[4]+' min',ex.toFixed(2)+' m3',(d>0?'+':'')+d.toFixed(1)+'%',ok?pill('Verified','ok'):pill('Check','bad')]});
+const hm=Math.floor(tm),hs=Math.round((tm-hm)*60);
+return `<div class="grid">${kpi('Fresh water added today',tot.toFixed(1)+' m3','from flow meter',pill('4 events','info'))}
+${kpi('Pump run time today',hm+' min '+hs+' s','fresh water pump',pill('Logged on event','ok'))}
+${kpi('Meter vs pump check',okn+' of 4 match','within 5%',okn<4?pill('1 to check','bad'):pill('All match','ok'))}
+${kpi('Treated tank level','58%','after last addition',pill('Normal','ok'))}</div>
+<div class="card" style="margin-top:14px"><h3>Fresh water addition events</h3><div class="lbl" style="margin-bottom:6px">Each event is complete when the fresh water pump has stopped and the flow meter reads zero. The quantity is taken from the flow meter and checked against pump run time x rated flow (30 m3/h).</div>${tbl(['Event time','Reason','Flow meter quantity','Pump run time','Expected from run time','Difference','Check'],rows)}</div>
+<div class="two"><div class="card"><h3>Latest mismatch</h3>${feed([['14:15',pill('Check','bad')+' Pump ran 5 min 58 s, which should give 2.99 m3, but the flow meter recorded 2.5 m3.'],['Likely','Air in the line, a partly closed valve, or a meter fault. Alarm sent on event.']])}</div>
+<div class="card"><h3>How an event is recorded</h3>${feed([['Start','Pump starts and inlet valve opens, time stamped'],['During','Flow meter total is counted'],['End','Pump stops and flow is zero, event closed'],['Send','One FRESH_WATER_ADD record with quantity, run time and check result']])}</div></div>`},
+stop:()=>`<div class="card"><h3>Command path</h3><div class="pipe"><span class="n erp">ERPNext</span><span class="a">to</span><span class="n">IoT gateway</span><span class="a">to</span><span class="n">PLC (stop command)</span><span class="a">then</span><span class="n">Acknowledgement back to ERPNext</span></div><div class="lbl">A scheduled stop locks new washes for the dealership on the decided date, and a wash in progress finishes first. A hard stop locks the machine at once.</div></div>
+<div id="stopbox" style="margin-top:14px"></div>
+<div class="two"><div class="card"><h3>Command log</h3><div id="stoplog"></div></div>
+<div class="card"><h3>What the command looks like</h3><pre style="margin:0;overflow-x:auto;font-size:12px;line-height:1.5">{
+ "cmd": "MACHINE_STOP",
+ "type": "HARD",
+ "dealership": "RE-MANMOHAN-CHANDIGARH",
+ "issued_by": "ERPNext user",
+ "reason": "Payment overdue",
+ "ack_required": true
+}</pre></div></div>`
 };
 function spark(a){const m=Math.max(...a),w=300,h=70,s=w/(a.length-1);const p=a.map((v,i)=>`${i*s},${h-8-(v/m)*(h-16)}`).join(' ');return `<svg viewBox="0 0 ${w} ${h}" width="100%" height="70" role="img" aria-label="trend"><polyline points="${p}" fill="none" stroke="var(--teal)" stroke-width="2.5"/></svg>`}
 
@@ -153,9 +180,66 @@ Object.keys(S).forEach((k,i)=>{const d=S[k],a=d.o+d.f-d.c,v=(a-d.t)/d.t*100,c=Ma
 const bt=document.createElement('button');bt.className='sc';bt.innerHTML=`<b>${k}</b><div class="big" style="margin:6px 0">${fmt(v)}</div>${pill(k==='Within limit'?'Normal':k==='Higher than theoretical'?'Alert: over-use':'Alert: under-use',c)}<div class="lbl" style="margin-top:6px">Actual ${a} L vs theoretical ${d.t} L. Click to load.</div>`;
 bt.onclick=()=>{ids.forEach(x=>document.getElementById(x).value=d[x]);calc();box.querySelectorAll('.sc').forEach(e=>e.classList.remove('on'));bt.classList.add('on')};box.appendChild(bt)});
 ids.forEach(i=>document.getElementById(i).oninput=calc);calc();box.firstChild.classList.add('on')}
-const names={overview:'Overview',chem:'Chemicals',variance:'Stock variance',sludge:'Sludge and cleaning',bw:'Filter backwash',iot:'IoT events',erp:'ERPNext flow'};
+function snap(t,lv,ang,fl,st,col){const lh=Math.round(140*lv/100),ly=180-lh,B='#6b5a3e';
+return `<svg viewBox="0 0 320 240" width="100%" role="img" aria-label="Sludge valve ${st} at ${t}" style="display:block;border-radius:8px"><rect width="320" height="240" fill="#33454B"/><rect y="205" width="320" height="35" fill="#263238"/>
+<rect x="10" y="40" width="90" height="140" fill="#2a3b41" stroke="#8FA8B1" stroke-width="2"/><rect x="11" y="${ly}" width="88" height="${lh}" fill="${B}"/>
+<rect x="100" y="163" width="160" height="14" fill="#9aa5a8"/><rect x="100" y="164" width="60" height="12" fill="${B}"/>${fl>0?`<rect x="190" y="164" width="${fl>.7?70:35}" height="12" fill="${B}"/>`:''}
+<rect x="160" y="156" width="30" height="34" rx="4" fill="#b8452f"/><rect x="172" y="142" width="6" height="16" fill="#c9d1d3"/><g transform="rotate(${ang} 175 142)"><rect x="153" y="139" width="44" height="6" rx="3" fill="#f2c230"/></g>
+<rect x="225" y="205" width="70" height="22" fill="#1d272b"/>${fl>0?`<rect x="${261-fl*6}" y="177" width="${fl*12}" height="28" fill="${B}"/><ellipse cx="260" cy="214" rx="${10+fl*22}" ry="4" fill="${B}"/>`:''}
+<g font-family="Arial,sans-serif" font-size="11" fill="#fff"><text x="8" y="16">CAM-02 Clarifier outlet</text><text x="312" y="16" text-anchor="end">01 Oct 2026 ${t}</text><text x="55" y="34" text-anchor="middle">Level ${lv}%</text><rect x="8" y="212" width="${st==='CLOSED'?96:84}" height="20" rx="4" fill="${col}"/><text x="14" y="226" font-weight="bold">Valve ${st}</text></g></svg>`}
+
+const TODAY='2026-10-03';
+const D=[{n:'TVS Krishna Motors',w:1180,p:41300,due:'2026-10-05',sd:'',st:'Active'},{n:'RE Manmohan Chandigarh',w:905,p:63350,due:'2026-09-25',sd:'2026-10-06',st:'Scheduled'},{n:'TVS Trijal Motors',w:640,p:20480,due:'2026-10-10',sd:'',st:'Active'}];
+let LOG=[['03 Oct 11:50','ERPNext','RE Manmohan Chandigarh: stop scheduled for 06 Oct 2026 (payment overdue 8 days)']],MSG='',CF=-1;
+const fd=x=>new Date(x+'T00:00:00').toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'});
+const inr=x=>'Rs '+x.toLocaleString('en-IN');
+function logit(t){LOG.unshift([new Date().toLocaleString('en-GB',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'}),'ERPNext',t])}
+function renderStop(){
+const rows=D.map((d,i)=>{const od=Math.max(0,Math.round((new Date(TODAY)-new Date(d.due))/864e5));
+const st=d.st==='Stopped'?pill('Stopped, machine locked','bad'):d.st==='Scheduled'?pill('Stop on '+fd(d.sd),'warn'):pill('Active','ok');
+let a='';
+if(d.st==='Stopped')a=`<button class="bt p" data-a="resume" data-i="${i}">Resume machine</button>`;
+else if(CF===i)a=`<b>Hard stop now?</b> <button class="bt d" data-a="hardok" data-i="${i}">Yes, stop</button><button class="bt" data-a="cancel" data-i="${i}">Cancel</button>`;
+else a=`<button class="bt p" data-a="sched" data-i="${i}">Schedule stop</button>${d.st==='Scheduled'?`<button class="bt" data-a="unsched" data-i="${i}">Cancel schedule</button>`:''}<button class="bt d" data-a="hard" data-i="${i}">Hard stop</button>`;
+return [d.n,d.w.toLocaleString('en-IN'),'<b>'+inr(d.p)+'</b>',fd(d.due)+(od?'<br>'+pill(od+' days overdue','bad'):''),`<input type="date" data-i="${i}" value="${d.sd}" min="${TODAY}" aria-label="Stop date for ${d.n}"${d.st==='Stopped'?' disabled':''}>`,st,a]});
+document.getElementById('stopbox').innerHTML=`<div class="card"><h3>Dealership payment and machine control</h3>${MSG?`<div class="note" style="display:block;margin-bottom:8px">${MSG}</div>`:''}<div class="lbl" style="margin-bottom:6px">Wash counts and pending amount come from ERPNext. Pick a decided date and click Schedule stop, or use Hard stop to lock the machine immediately.</div>${tbl(['Dealership','Washes (this month)','Amount pending','Payment due','Decided stop date','Machine status','Action'],rows)}</div>`;
+document.getElementById('stoplog').innerHTML=feed(LOG.slice(0,6).map(l=>[l[0],l[2]]))}
+function initStop(){MSG='';CF=-1;renderStop();const b=document.getElementById('stopbox');
+b.onchange=e=>{if(e.target.type==='date')D[+e.target.dataset.i].sd=e.target.value};
+b.onclick=e=>{const t=e.target.closest('button');if(!t)return;const i=+t.dataset.i,d=D[i],a=t.dataset.a;MSG='';
+if(a==='sched'){if(!d.sd||d.sd<=TODAY){MSG='Pick a future stop date first, or use Hard stop.'}else{d.st='Scheduled';logit(d.n+': stop scheduled for '+fd(d.sd)+', pending '+inr(d.p))}}
+if(a==='unsched'){d.st='Active';d.sd='';logit(d.n+': scheduled stop cancelled')}
+if(a==='hard'){CF=i}
+if(a==='cancel'){CF=-1}
+if(a==='hardok'){CF=-1;d.st='Stopped';logit(d.n+': HARD STOP sent to PLC, machine locked. PLC acknowledged in 1.2 s')}
+if(a==='resume'){d.st='Active';d.sd='';logit(d.n+': machine resumed after payment cleared')}
+renderStop()}}
+
+const TASKS=[];
+const sec=(t,pl,br,body)=>`<details open style="margin-top:16px"><summary style="cursor:pointer;font-weight:700;font-size:15px;padding:6px 0">${t} ${pl} <span class="lbl" style="font-weight:400">${br}</span></summary>${body}</details>`;
+const addForm=f=>`<div class="card" style="margin-top:16px"><h3>Added tasks (${f})</h3><div id="ut"></div><h3 style="margin-top:14px">Add a ${f.toLowerCase()} task</h3><div class="in"><div><label for="tn">Task name</label><input id="tn" placeholder="e.g. Check oil skimmer"></div><div><label for="ts">Captured by</label><select id="ts"><option>PLC event</option><option>Sensor</option><option>Camera snapshot</option><option>Flow meter</option><option>Operator confirmation</option></select></div><div><label>&nbsp;</label><button class="bt p" id="ta">Add task</button></div></div></div>`;
+function drawUT(f){const L=TASKS.map((t,i)=>[t,i]).filter(x=>x[0].f===f);
+document.getElementById('ut').innerHTML=L.length?tbl(['Task','Captured by','Status','Action'],L.map(([t,i])=>[t.n,t.s,t.done?pill('Completed '+t.at,'ok'):pill('Not completed','warn'),(t.done?`<button class="bt" data-a="reset" data-i="${i}">Reset</button>`:`<button class="bt p" data-a="sim" data-i="${i}">Simulate event captured</button>`)+`<button class="bt" data-a="del" data-i="${i}">Remove</button>`])):'<div class="lbl">No added tasks yet. Tasks you add are tracked here.</div>'}
+function initMaint(f){const nm={daily:'Daily',weekly:'Weekly',monthly:'Monthly'}[f];drawUT(nm);
+document.getElementById('ta').onclick=()=>{const n=document.getElementById('tn').value.trim();if(!n)return;TASKS.push({n,f:nm,s:document.getElementById('ts').value,done:false,at:''});document.getElementById('tn').value='';drawUT(nm)};
+document.getElementById('ut').onclick=e=>{const b=e.target.closest('button');if(!b)return;const i=+b.dataset.i,a=b.dataset.a;if(a==='sim'){TASKS[i].done=true;TASKS[i].at=new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'})}if(a==='reset')TASKS[i].done=false;if(a==='del')TASKS.splice(i,1);drawUT(nm)}}
+function dailyV(){return `<div class="grid">${kpi('Daily tasks completed','2 of 3','today, 03 Oct',pill('1 running','info'))}${kpi('Filter backwash cycles','6','sand 4, carbon 2',pill('From PLC','info'))}${kpi('Sludge-outs','1','clarifier, 22 min',pill('Completed','ok'))}${kpi('Fresh water added','9.4 m3','4 events',pill('1 to check','warn'))}</div>
+<div class="card" style="margin-top:14px"><h3>Daily task summary</h3>${tbl(['Task','Brief','Captured by','Status','Latest'],[['Filter backwash','Sand and carbon filter cycles read from the PLC','PLC events',pill('Running, carbon filter','info'),'Last start 14:32'],['Sludge out','Sludge drain with valve feedback and camera snapshots','Valve feedback, pump run, camera',pill('Completed','ok'),'Clarifier, 13:45, 22 min'],['Fresh water added','Quantity from flow meter, checked against pump run time','Flow meter, pump run time',pill('Completed, 1 to check','warn'),'4 events, last 14:15']])}</div>
+${sec('Filter backwash',pill('Running','info'),'Sand and carbon filter, from PLC',V.bw())}
+${sec('Sludge out',pill('Completed','ok'),'Valve, pump and camera evidence',V.sludge())}
+${sec('Fresh water added',pill('1 to check','warn'),'Flow meter and pump run time',V.water())}
+${addForm('Daily')}`}
+function weeklyV(){return `<div class="grid">${kpi('This week (Wk 40)','Not completed yet','due by Sun 04 Oct',pill('Due tomorrow','warn'))}${kpi('Last completed','26 Sep','45 min',pill('Captured','ok'))}${kpi('Compliance, last 4 weeks','75%','3 of 4 completed',pill('1 missed','warn'))}</div>
+<div class="card" style="margin-top:14px"><h3>Sludge bag cleaning</h3><div class="lbl" style="margin-bottom:6px">An event is captured when the sludge bag area door opens, the bag is changed and cleaned, and the area is closed again. No event by the end of the week means Not completed.</div>${tbl(['Week','Dates','Event captured','Status','Evidence'],[['Wk 40','28 Sep to 04 Oct','Not captured yet',pill('Not completed yet','warn'),'-'],['Wk 39','21 to 27 Sep','26 Sep, 10:12 to 10:57 (45 min)',pill('Completed','ok'),'Door sensor, sludge pump stopped, 2 camera snapshots'],['Wk 38','14 to 20 Sep','19 Sep, 09:50 to 10:30 (40 min)',pill('Completed','ok'),'Door sensor, 2 camera snapshots'],['Wk 37','07 to 13 Sep','No event captured',pill('Not completed','bad'),'Missed, alert sent 13 Sep'],['Wk 36','31 Aug to 06 Sep','04 Sep, 10:05 to 10:48 (43 min)',pill('Completed','ok'),'Door sensor, 2 camera snapshots']])}</div>
+<div class="card" style="margin-top:14px"><h3>Evidence for the last completed event, 26 Sep</h3>${feed([['10:12','Sludge bag area door opened'],['10:14','Sludge pump stopped, bag changed'],['10:15','Camera snapshot before cleaning'],['10:55','Camera snapshot after cleaning'],['10:57','Door closed, event completed and sent']])}</div>${addForm('Weekly')}`}
+function monthlyV(){return `<div class="grid">${kpi('Collection tank cleaning','Due 15 Oct','this month',pill('Pending','warn'))}${kpi('Last cleaned','14 Sep','2 h 25 min',pill('Captured','ok'))}${kpi('Compliance, last 4 months','75%','3 of 4 completed',pill('1 missed','warn'))}</div>
+<div class="card" style="margin-top:14px"><h3>Collection tank cleaning</h3><div class="lbl" style="margin-bottom:6px">An event is captured when the tank is drained, the manhole is opened, cleaned and closed, and the tank is refilled, all read from sensors and camera.</div>${tbl(['Month','Due','Event captured','Status','Evidence'],[['Oct 2026','15 Oct','Not captured yet',pill('Pending','warn'),'-'],['Sep 2026','15 Sep','14 Sep, 09:40 to 12:05 (2 h 25 min)',pill('Completed','ok'),'Manhole sensor, level drained, 2 camera snapshots'],['Aug 2026','15 Aug','12 Aug, 10:05 to 12:30 (2 h 25 min)',pill('Completed','ok'),'Manhole sensor, level drained, 2 camera snapshots'],['Jul 2026','15 Jul','No event captured',pill('Not completed','bad'),'Missed, alert sent 16 Jul'],['Jun 2026','15 Jun','15 Jun, 09:55 to 12:10 (2 h 15 min)',pill('Completed','ok'),'Manhole sensor, level drained, 2 camera snapshots']])}</div>
+<div class="card" style="margin-top:14px"><h3>Evidence for the last completed event, 14 Sep</h3>${feed([['09:40','Manhole cover opened (sensor)'],['09:41','Camera snapshot before cleaning'],['09:52','Tank drained, level 100% to 5%, pump ran 38 min'],['12:00','Camera snapshot after cleaning'],['12:05','Manhole closed, event completed and sent'],['14:00','Tank refilled to 80%']])}</div>${addForm('Monthly')}`}
+const SUBS={chemicals:[['chem','Dosing and stock',()=>V.chem()],['variance','Stock variance',()=>V.variance(),initVar]],maint:[['daily','Daily',dailyV],['weekly','Weekly',weeklyV],['monthly','Monthly',monthlyV]]};
+function goSub(k,key){const it=SUBS[k].find(x=>x[0]===key),sn=document.getElementById('sn');sn.innerHTML=SUBS[k].map(x=>`<button data-s="${x[0]}" class="${x[0]===key?'on':''}">${x[1]}</button>`).join('');sn.querySelectorAll('button').forEach(b=>b.onclick=()=>goSub(k,b.dataset.s));document.getElementById('sb').innerHTML=it[2]();if(it[3])it[3]();if(k==='maint')initMaint(key)}
+const names={chemicals:'Chemicals',maint:'Remote maintenance (monitoring)',stop:'Machine stop',iot:'IoT events',erp:'ERPNext flow'};
 const tabs=$('#tabs');
-function show(k){tabs.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b.dataset.k===k));$('#view').innerHTML=V[k]();if(k==='variance')initVar()}
+function show(k){tabs.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b.dataset.k===k));$('#view').innerHTML=SUBS[k]?'<div class="subnav" id="sn"></div><div id="sb"></div>':V[k]();if(SUBS[k])goSub(k,SUBS[k][0][0]);if(k==='stop')initStop()}
 Object.keys(names).forEach(k=>{const b=document.createElement('button');b.textContent=names[k];b.dataset.k=k;b.onclick=()=>show(k);tabs.appendChild(b)});
-show('overview');
+show('chemicals');
 </script></body></html>
